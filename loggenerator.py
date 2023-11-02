@@ -8,7 +8,6 @@ class Transaction:
     def output_transaction(self):
         return "{Transaction ID: " + str(self.id) + ", Operations: " + str(self.ops) + "}"
 
-
 def operation_string(op, data_item):
     return op + "[" + str(data_item) + "]"
 
@@ -28,8 +27,9 @@ def generate_log_data(num_data_items, num_transactions):
 
         for operation in range(num_operations):
             new_operation = operation_string(random.choice(operations), random.choice(data_items))
-            while ((current_read_operations.count(new_operation) != 0) and (current_write_operations.count(new_operation) != 0)):
+            while ((current_read_operations.count(new_operation) != 0) or (current_write_operations.count(new_operation) != 0)):
                 new_operation = operation_string(random.choice(operations), random.choice(data_items))
+            
             current_operations.append(new_operation)
             if new_operation[0] == "R":
                 current_read_operations.append(new_operation)
@@ -43,4 +43,5 @@ def generate_log_data(num_data_items, num_transactions):
         logfile.write(transaction.output_transaction() + "\n")
     logfile.close()
 
-generate_log_data(5, 30)
+
+generate_log_data(num_data_items=5, num_transactions=30)
