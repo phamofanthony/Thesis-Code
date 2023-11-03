@@ -27,9 +27,8 @@ def generate_log_data(num_data_items, num_transactions):
 
         for operation in range(num_operations):
             new_operation = operation_string(random.choice(operations), random.choice(data_items))
-            while ((current_read_operations.count(new_operation) != 0) or (current_write_operations.count(new_operation) != 0)):
+            while ((current_read_operations.count(new_operation) != 0) or (current_write_operations.count(new_operation) != 0) or ((new_operation[0] == "R") and (current_write_operations.count("W[" + str(new_operation[2]) + "]") != 0))):
                 new_operation = operation_string(random.choice(operations), random.choice(data_items))
-            
             current_operations.append(new_operation)
             if new_operation[0] == "R":
                 current_read_operations.append(new_operation)
@@ -45,3 +44,7 @@ def generate_log_data(num_data_items, num_transactions):
 
 
 generate_log_data(num_data_items=5, num_transactions=30)
+
+list_test = ["W[1]"]
+word = "010"
+print(list_test.count("W[" + word[1] + "]"))
