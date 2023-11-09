@@ -11,7 +11,7 @@ class Transaction:
 def operation_string(op, data_item):
     return op + "[" + str(data_item) + "]"
 
-def generate_log_data(num_data_items, num_transactions):
+def generate_data(file_name, num_data_items, num_transactions):
     min_ops_per_transaction = 2
     max_ops_per_transaction = 5
     data_items = range(num_data_items)
@@ -37,14 +37,11 @@ def generate_log_data(num_data_items, num_transactions):
         current_operations.append("C" + str(transaction_id))
         transactions.append(Transaction(transaction_id, current_operations))
 
-    logfile = open("log.txt", "w")
+    logfile = open(file_name + ".txt", "w")
     for transaction in transactions:
         logfile.write(transaction.output_transaction() + "\n")
     logfile.close()
 
 
-generate_log_data(num_data_items=5, num_transactions=30)
+generate_data("test", num_data_items=5, num_transactions=30)
 
-list_test = ["W[1]"]
-word = "010"
-print(list_test.count("W[" + word[1] + "]"))
