@@ -1,4 +1,5 @@
 import random
+import json
 
 class Transaction:
     def __init__(self, id, ops):
@@ -37,11 +38,7 @@ def generate_data(file_name, num_data_items, num_transactions):
         current_operations.append("C" + str(transaction_id))
         transactions.append(Transaction(transaction_id, current_operations))
 
-    logfile = open(file_name + ".txt", "w")
-    for transaction in transactions:
-        logfile.write(transaction.output_transaction() + "\n")
-    logfile.close()
-
-
-generate_data("test", num_data_items=5, num_transactions=30)
+    transactions_dict = [{"id": t.id, "ops": t.ops} for t in transactions]
+    with open(file_name + ".json", 'w') as json_file:
+        json.dump(transactions_dict, json_file, indent=2)
 
