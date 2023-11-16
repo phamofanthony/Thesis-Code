@@ -51,6 +51,9 @@ def generate_testing_data(file_name, num_data_items, num_transactions, patterns_
     data_items = range(num_data_items)
     operations = ["R", "W"]
     transactions = []
+    GoodPatterned = 0
+    GoodRandomized = 0
+    Bad = 0
 
     for i in range(num_transactions):
         transaction_id = i + 1
@@ -58,11 +61,15 @@ def generate_testing_data(file_name, num_data_items, num_transactions, patterns_
         if i < 95:
             if random.random() < 0.95:
                 transactions.append(create_transaction("patterned", transaction_id, operations, data_items, num_operations, patterns_list))
+                GoodPatterned += 1
             else:
                 transactions.append(create_transaction("randomized", transaction_id, operations, data_items, num_operations, patterns_list))
+                GoodRandomized += 1
         else:
             transactions.append(create_transaction("randomized", transaction_id, operations, data_items, num_operations, patterns_list))
+            Bad += 1
 
+    print(f"There are {GoodPatterned} good patterned transactions, {GoodRandomized} good randomized transactions, and {Bad} bad randomized transactions")
     transactions_dict = [{"id": t.id, "ops": t.ops} for t in transactions]
     with open(file_name + ".json", 'w') as json_file:
         json.dump(transactions_dict, json_file, indent=2)
@@ -73,7 +80,6 @@ def create_transaction(type, transaction_id, operations, data_items, num_operati
     if type == "patterned":
         current_operations = random.choice(patterns)
         current_operations.append("C" + str(transaction_id))
-        print(f"Transaction {transaction_id} is {type}")
         return Transaction(transaction_id, current_operations)
     elif type == "randomized":
         current_operations = []
@@ -89,5 +95,4 @@ def create_transaction(type, transaction_id, operations, data_items, num_operati
             elif new_operation[0] == "W":
                 current_write_operations.append(new_operation)
         current_operations.append("C" + str(transaction_id))
-        print(f"Transaction {transaction_id} is {type}")
         return Transaction(transaction_id, current_operations)
