@@ -10,33 +10,36 @@ def main():
     generate_testing_data("testing_data", num_data_items=8, num_transactions=100, patterns_list=patterns)
 
     #analyze test data
-    analyze_test_data(patterns)
+    analyze_test_data(patterns = patterns, num_transactions = 100)
 
 
-def analyze_test_data(patterns):
+def analyze_test_data(patterns, num_transactions):
     with open('testing_data.json', 'r') as json_file:
         objects = json.load(json_file)
-    
+    intermediate_patterns = []
     ops_arrays = [obj['ops'] for obj in objects]
     good_nonflagged = 0
     bad_nonflagged = 0
 
-    for i in range(100):
+    for i in range(num_transactions):
         for pattern in patterns:
-            if i <= 95:
+            if i <= round(0.95 * num_transactions):
                 if is_subsequence(pattern, ops_arrays[i]):
                     good_nonflagged += 1
                     #print(f"{pattern} is a subsequence of {ops_arrays[i]}")
                     break
+                    
             else:
                 if is_subsequence(pattern, ops_arrays[i]):
                     bad_nonflagged += 1
                     #print(f"{pattern} is a subsequence of {ops_arrays[i]}")
                     break
     
-    print(f"Good Transactions: {good_nonflagged}/95 passed, {95-good_nonflagged}/95 were flagged as suspicious")
-    print(f"Bad Transactions: {bad_nonflagged}/5 passed, {5-bad_nonflagged}/5 were flagged as suspicious")
-    print(f"Summary: {100 - good_nonflagged - bad_nonflagged} transactions were blocked, where only {5 - bad_nonflagged} should have been")
+    
+
+    print(f"Good Transactions: {good_nonflagged}/{round(0.95 * num_transactions)} passed, {round(0.95 * num_transactions)-good_nonflagged}/{round(0.95 * num_transactions)} were flagged as suspicious")
+    print(f"Bad Transactions: {bad_nonflagged}/{num_transactions - round(0.95 * num_transactions)} passed, {num_transactions - round(0.95 * num_transactions) - bad_nonflagged}/{num_transactions - round(0.95 * num_transactions)} were flagged as suspicious")
+    print(f"Summary: {num_transactions - good_nonflagged - bad_nonflagged} transactions were blocked, where only {num_transactions - bad_nonflagged} should have been")
 
 
 

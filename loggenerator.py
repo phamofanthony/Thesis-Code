@@ -1,6 +1,7 @@
 import random
 import json
 import copy
+import math
 
 class Transaction:
     def __init__(self, id, ops):
@@ -58,7 +59,7 @@ def generate_testing_data(file_name, num_data_items, num_transactions, patterns_
     for i in range(num_transactions):
         transaction_id = i + 1
         num_operations = random.randrange(min_ops_per_transaction, max_ops_per_transaction + 1)
-        if i < 95:
+        if i < round(0.95 * num_transactions):
             if random.random() < 0.95:
                 transactions.append(create_transaction("patterned", transaction_id, operations, data_items, num_operations, patterns_list))
                 GoodPatterned += 1
