@@ -1,21 +1,21 @@
 import json
 from collections import Counter
-from dynamic_log_generator import *
+from predefined_log_generator import *
 
-def main():
+def predefined_results(num_data_items, num_transactions):
     #create training data / list of patterns
-    patterns = generate_patterns(num_data_items=8, num_transactions=5)
+    patterns = generate_patterns(num_data_items=num_data_items, num_transactions=5)
 
     #generate test data
-    generate_testing_data("dynamic_testing_data", num_data_items=8, num_transactions=100, patterns_list=patterns)
+    generate_testing_data("predefined_testing_data", num_data_items=num_data_items, num_transactions=num_transactions, patterns_list=patterns)
 
     #analyze test data
-    analyze_test_data(patterns = patterns, num_transactions = 100)
+    return analyze_test_data(patterns = patterns, num_transactions = num_transactions, file_name = 'predefined_testing_data.json')
 
 
-def analyze_test_data(patterns, num_transactions):
+def analyze_test_data(patterns, num_transactions, file_name):
     patterns = patterns
-    with open('dynamic_testing_data.json', 'r') as json_file:
+    with open(file_name, 'r') as json_file:
         objects = json.load(json_file)
     intermediate_patterns = []
     ops_arrays = [obj['ops'] for obj in objects]
@@ -39,9 +39,14 @@ def analyze_test_data(patterns, num_transactions):
             update_intermediate_patterns(ops_arrays[i], intermediate_patterns, patterns)
     
     #print(f"{num_transactions} total transactions, {good_nonflagged} good-nonflagged. {bad_nonflagged} bad-nonflagged")
-    print(f"Good Transactions: {good_nonflagged}/{round(0.95 * num_transactions)} passed, {round(0.95 * num_transactions)-good_nonflagged}/{round(0.95 * num_transactions)} were flagged as suspicious")
-    print(f"Bad Transactions: {bad_nonflagged}/{num_transactions - round(0.95 * num_transactions)} passed, {num_transactions - round(0.95 * num_transactions) - bad_nonflagged}/{num_transactions - round(0.95 * num_transactions)} were flagged as suspicious")
-    print(f"Summary: {num_transactions - good_nonflagged - bad_nonflagged} transactions were blocked, where only {num_transactions - round(0.95 * num_transactions)} should have been")
+    #print("Predefined Results")
+    #print(f"    Good Transactions: {good_nonflagged}/{round(0.95 * num_transactions)} passed, {round(0.95 * num_transactions)-good_nonflagged}/{round(0.95 * num_transactions)} were flagged as suspicious")
+    #print(f"    Bad Transactions: {bad_nonflagged}/{num_transactions - round(0.95 * num_transactions)} passed, {num_transactions - round(0.95 * num_transactions) - bad_nonflagged}/{num_transactions - round(0.95 * num_transactions)} were flagged as suspicious")
+    #print(f"    Summary: {num_transactions - good_nonflagged - bad_nonflagged} transactions were blocked, where only {num_transactions - round(0.95 * num_transactions)} should have been")
+
+    good_flagged = round(0.95 * num_transactions)-good_nonflagged
+    bad_flagged = num_transactions - round(0.95 * num_transactions) - bad_nonflagged
+    return good_nonflagged, good_flagged, bad_nonflagged, bad_flagged
 
 
 
@@ -78,8 +83,6 @@ def update_intermediate_patterns(new_sequence, intermediate_patterns, patterns):
     for sequence in common_sequences:
         if sequence not in patterns:
             patterns.append(sequence)
-
-main()
 
 
 

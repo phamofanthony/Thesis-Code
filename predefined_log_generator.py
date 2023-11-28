@@ -70,7 +70,7 @@ def generate_testing_data(file_name, num_data_items, num_transactions, patterns_
             transactions.append(create_transaction("randomized", transaction_id, operations, data_items, num_operations, patterns_list))
             Bad += 1
 
-    print(f"There are {GoodPatterned} good patterned transactions, {GoodRandomized} good randomized transactions, and {Bad} bad randomized transactions")
+    #print(f"There are {GoodPatterned} good patterned transactions, {GoodRandomized} good randomized transactions, and {Bad} bad randomized transactions")
     transactions_dict = [{"id": t.id, "ops": t.ops} for t in transactions]
     with open(file_name + ".json", 'w') as json_file:
         json.dump(transactions_dict, json_file, indent=2)
