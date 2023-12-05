@@ -14,7 +14,7 @@ class Transaction:
 def operation_string(op, data_item):
     return op + "[" + str(data_item) + "]"
 
-def generate_patterns(num_data_items, num_transactions):
+def generate_patterns(num_data_items, num_transactions, min_ops_per_transaction, max_ops_per_transaction):
     #sequence generation variables
     data_items = range(num_data_items)
     operations = ["R", "W"]
@@ -23,8 +23,8 @@ def generate_patterns(num_data_items, num_transactions):
     #pattern generation variables
     patterns = []
     num_patterns = num_transactions
-    min_ops_per_pattern = 3
-    max_ops_per_pattern = 4
+    min_ops_per_pattern = min_ops_per_transaction
+    max_ops_per_pattern = max_ops_per_transaction
 
     #generate random patterns
     for i in range(num_patterns):
@@ -46,9 +46,9 @@ def generate_patterns(num_data_items, num_transactions):
 
     return patterns
 
-def generate_testing_data(file_name, num_data_items, num_transactions, patterns_list):
-    min_ops_per_transaction = 3
-    max_ops_per_transaction = 5
+def generate_testing_data(file_name, num_data_items, num_transactions, min_ops_per_transaction, max_ops_per_transaction, patterns_list):
+    min_ops_per_transaction = min_ops_per_transaction
+    max_ops_per_transaction = max_ops_per_transaction
     data_items = range(num_data_items)
     operations = ["R", "W"]
     transactions = []

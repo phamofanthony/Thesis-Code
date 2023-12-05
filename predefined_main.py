@@ -2,12 +2,12 @@ import json
 from collections import Counter
 from predefined_log_generator import *
 
-def predefined_results(num_data_items, num_transactions):
+def predefined_results(num_data_items, num_transactions, min_ops_per_transaction, max_ops_per_transaction):
     #create training data / list of patterns
-    patterns = generate_patterns(num_data_items=num_data_items, num_transactions=5)
+    patterns = generate_patterns(num_data_items=num_data_items, num_transactions=5, min_ops_per_transaction=min_ops_per_transaction, max_ops_per_transaction=max_ops_per_transaction)
 
     #generate test data
-    generate_testing_data("predefined_testing_data", num_data_items=num_data_items, num_transactions=num_transactions, patterns_list=patterns)
+    generate_testing_data("predefined_testing_data", num_data_items=num_data_items, num_transactions=num_transactions, min_ops_per_transaction=min_ops_per_transaction, max_ops_per_transaction=max_ops_per_transaction, patterns_list=patterns)
 
     #analyze test data
     return analyze_test_data(patterns = patterns, num_transactions = num_transactions, file_name = 'predefined_testing_data.json')
@@ -24,7 +24,7 @@ def analyze_test_data(patterns, num_transactions, file_name):
 
     for i in range(num_transactions):
         for pattern in patterns:
-            if i <= round(0.95 * num_transactions):
+            if i < round(0.95 * num_transactions):
                 if is_subsequence(pattern, ops_arrays[i]):
                     good_nonflagged += 1
                     #print(f"{pattern} is a subsequence of {ops_arrays[i]}")
@@ -35,7 +35,7 @@ def analyze_test_data(patterns, num_transactions, file_name):
                     #print(f"{pattern} is a subsequence of {ops_arrays[i]}")
                     break
         
-        if i <= round(0.95 * num_transactions):
+        if i < round(0.95 * num_transactions):
             update_intermediate_patterns(ops_arrays[i], intermediate_patterns, patterns)
     
     #print(f"{num_transactions} total transactions, {good_nonflagged} good-nonflagged. {bad_nonflagged} bad-nonflagged")

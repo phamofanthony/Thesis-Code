@@ -2,15 +2,15 @@ import json
 from collections import Counter
 from defined_log_generator import generate_defined_data
 
-def defined_results(num_data_items, num_transactions):
+def defined_results(num_data_items, num_transactions, min_ops_per_transaction, max_ops_per_transaction):
     #create training data
-    generate_defined_data(file_name="defined_training_data", num_data_items=num_data_items, num_transactions=100000)
+    generate_defined_data(file_name="defined_training_data", num_data_items=num_data_items, num_transactions=100000, min_ops_per_transaction=min_ops_per_transaction, max_ops_per_transaction=max_ops_per_transaction)
     
     #find common patterns
     patterns = find_defined_patterns(min_sequence_length=3, min_num_occurences=3)
 
     #generate test data
-    generate_defined_data(file_name="defined_testing_data", num_data_items=num_data_items, num_transactions=num_transactions)
+    generate_defined_data(file_name="defined_testing_data", num_data_items=num_data_items, num_transactions=num_transactions, min_ops_per_transaction=min_ops_per_transaction, max_ops_per_transaction=max_ops_per_transaction)
 
     #analyze test data
     return analyze_defined_test_data(patterns = patterns, num_transactions = num_transactions, file_name = 'defined_testing_data.json')
@@ -44,7 +44,7 @@ def analyze_defined_test_data(patterns, num_transactions, file_name):
 
     for i in range(num_transactions):
         for pattern in patterns:
-            if i <= round(0.95 * num_transactions):
+            if i < round(0.95 * num_transactions):
                 if is_subsequence(pattern, ops_arrays[i]):
                     good_nonflagged += 1
                     #print(f"{pattern} is a subsequence of {ops_arrays[i]}")

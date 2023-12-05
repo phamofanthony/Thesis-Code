@@ -12,9 +12,9 @@ class Transaction:
 def operation_string(op, data_item):
     return op + "[" + str(data_item) + "]"
 
-def generate_defined_data(file_name, num_data_items, num_transactions):
-    min_ops_per_transaction = 2
-    max_ops_per_transaction = 5
+def generate_defined_data(file_name, num_data_items, num_transactions, min_ops_per_transaction, max_ops_per_transaction):
+    min_ops_per_transaction = min_ops_per_transaction
+    max_ops_per_transaction = max_ops_per_transaction
     data_items = range(num_data_items)
     operations = ["R", "W"]
     transactions = []
