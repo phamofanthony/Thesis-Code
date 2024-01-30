@@ -4,10 +4,10 @@ from defined_log_generator import generate_defined_data
 
 def defined_results(num_data_items, num_transactions, min_ops_per_transaction, max_ops_per_transaction):
     #create training data
-    generate_defined_data(file_name="defined_training_data", num_data_items=num_data_items, num_transactions=1000000, min_ops_per_transaction=min_ops_per_transaction, max_ops_per_transaction=max_ops_per_transaction)
+    generate_defined_data(file_name="defined_training_data", num_data_items=num_data_items, num_transactions=200000, min_ops_per_transaction=min_ops_per_transaction, max_ops_per_transaction=max_ops_per_transaction)
     
     #find common patterns
-    patterns = find_defined_patterns(min_sequence_length=4, min_num_occurences=10)
+    patterns = find_defined_patterns(min_sequence_length=3, min_num_occurences=2)
 
     #generate test data
     generate_defined_data(file_name="defined_testing_data", num_data_items=num_data_items, num_transactions=num_transactions, min_ops_per_transaction=min_ops_per_transaction, max_ops_per_transaction=max_ops_per_transaction)
