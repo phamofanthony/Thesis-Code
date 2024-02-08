@@ -2,7 +2,7 @@ import json
 from collections import Counter
 from defined_log_generator import generate_defined_data
 
-def defined_results(num_data_items, num_transactions, min_ops_per_transaction, max_ops_per_transaction):
+def defined_results(num_data_items, num_transactions, min_ops_per_transaction, max_ops_per_transaction, num_training_data):
     #create training data
     generate_defined_data(file_name="defined_training_data", num_data_items=num_data_items, num_transactions=200000, min_ops_per_transaction=min_ops_per_transaction, max_ops_per_transaction=max_ops_per_transaction)
     
